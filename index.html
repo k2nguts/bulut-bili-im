@@ -28,20 +28,48 @@
   <script>
     const API_URL = "https://bulut-bulut-bulut.kaanaydin2003.workers.dev/";
     const API_KEY = "1231321231231231321";
+    
+  const FORM_ACTION = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScjh3kLIkZkYnzPiPadbrc17QeyWpwJWBFOXktjmVbQeRDScg/formResponse";
+  const ENTRY_KAYNAK = "entry.882247960";
+  const ENTRY_FILTER = "entry.880943259";
+  const ENTRY_ADET   = "entry.1402258258";
 
-    async function getir() {
-      const q = document.getElementById("filter").value.trim();
-      const url = q ? `${API_URL}?filter=${encodeURIComponent(q)}` : API_URL;
+  async function logUse(filter, adet) {
+    try {
+      const body = new URLSearchParams();
+      body.append(ENTRY_KAYNAK, location.hostname);      
+      body.append(ENTRY_FILTER, filter || "-");
+      body.append(ENTRY_ADET, String(adet));
+      await fetch(FORM_ACTION, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+        mode: "no-cors" 
+      });
+    } catch (_) { /* sessiz geç */ }
+  }
 
-      const res = await fetch(url, { headers: { "x-api-key": API_KEY } });
-      const out = document.getElementById("out");
-      if (!res.ok) {
-        out.textContent = `Hata: ${res.status}\n` + await res.text();
-        return;
-      }
-      const data = await res.json();
-      out.textContent = JSON.stringify(data, null, 2);
+  async function getir() {
+    const q = document.getElementById("filter").value.trim();
+    const url = q ? `${API_URL}?filter=${encodeURIComponent(q)}` : API_URL;
+
+    const out = document.getElementById("out");
+    out.textContent = "Yükleniyor...";
+
+    const res = await fetch(url, { headers: { "x-api-key": API_KEY } });
+    if (!res.ok) {
+      out.textContent = `Hata: ${res.status}\n` + await res.text();
+      return;
     }
+    const data = await res.json();
+    out.textContent = JSON.stringify(data, null, 2);
+
+    
+    logUse(q, data.length);
+  }
+
+  document.getElementById("btn").addEventListener("click", getir);
+</script>
 
     document.getElementById("btn").addEventListener("click", getir);
   </script>
