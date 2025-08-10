@@ -25,10 +25,10 @@
   <small>Veriler Google Sheets → CSV → Cloudflare Worker üzerinden geliyor.</small>
   <pre id="out">Hazır.</pre>
 
-  <script>
-    const API_URL = "https://bulut-bulut-bulut.kaanaydin2003.workers.dev/";
-    const API_KEY = "1231321231231231321";
-    
+<script>
+  const API_URL = "https://bulut-bulut-bulut.kaanaydin2003.workers.dev/";
+  const API_KEY = "1231321231231231321";
+
   const FORM_ACTION = "https://docs.google.com/forms/u/0/d/e/1FAIpQLScjh3kLIkZkYnzPiPadbrc17QeyWpwJWBFOXktjmVbQeRDScg/formResponse";
   const ENTRY_KAYNAK = "entry.882247960";
   const ENTRY_FILTER = "entry.880943259";
@@ -64,14 +64,11 @@
     const data = await res.json();
     out.textContent = JSON.stringify(data, null, 2);
 
-    
     logUse(q, data.length);
   }
 
   document.getElementById("btn").addEventListener("click", getir);
 </script>
 
-    document.getElementById("btn").addEventListener("click", getir);
-  </script>
 </body>
 </html>
