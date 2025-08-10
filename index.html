@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini Cloud Projesi</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 16px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    pre{background:#f6f8fa;padding:16px;border-radius:8px;overflow:auto}
+    button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+    input{padding:8px 10px;border:1px solid #ddd;border-radius:8px;min-width:220px}
+    small{opacity:.7}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bulut Verileri</h1>
+    <div>
+      <input id="filter" placeholder="filter=aktif gibi (opsiyonel)" />
+      <button id="btn">Verileri Getir</button>
+    </div>
+  </header>
+
+  <small>Veriler Google Sheets → CSV → Cloudflare Worker üzerinden geliyor.</small>
+  <pre id="out">Hazır.</pre>
+
+  <script>
+    const API_URL = "https://bulut-bulut-bulut.kaanaydin2003.workers.dev/";
+    const API_KEY = "1231321231231231321";
+
+    async function getir() {
+      const q = document.getElementById("filter").value.trim();
+      const url = q ? `${API_URL}?filter=${encodeURIComponent(q)}` : API_URL;
+
+      const res = await fetch(url, { headers: { "x-api-key": API_KEY } });
+      const out = document.getElementById("out");
+      if (!res.ok) {
+        out.textContent = `Hata: ${res.status}\n` + await res.text();
+        return;
+      }
+      const data = await res.json();
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+
+    document.getElementById("btn").addEventListener("click", getir);
+  </script>
+</body>
+</html>
